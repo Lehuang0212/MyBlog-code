@@ -3,7 +3,6 @@ import sharp from 'sharp';
 import pngToIco from 'png-to-ico';
 
 const ICON_SOURCE = 'src/assets/icon-source.png';
-const HEAD_CROP = { left: 330, top: 80, width: 600, height: 600 };
 const CREAM = '#FAF7F2';
 const ACCENT = '#F09A32';
 
@@ -14,9 +13,14 @@ async function ensureDir(path) {
 async function main() {
   await ensureDir('public');
 
-  const head = await sharp(ICON_SOURCE)
-    .extract(HEAD_CROP)
-    .resize(440, 440, { fit: 'cover' })
+  // Keep the whole character: trim the transparent canvas, then scale it
+  // proportionally into the badge instead of cropping to the head.
+  const artwork = await sharp(ICON_SOURCE)
+    .trim()
+    .resize(440, 440, {
+      fit: 'contain',
+      background: { r: 0, g: 0, b: 0, alpha: 0 },
+    })
     .png()
     .toBuffer();
 
@@ -36,13 +40,13 @@ async function main() {
   })
     .composite([
       { input: ring, top: 0, left: 0 },
-      { input: head, top: 36, left: 36 },
+      { input: artwork, top: 36, left: 36 },
     ])
     .png()
     .toBuffer();
 
   await fs.writeFile('public/icon-512.png', badge);
-  await fs.writeFile('public/icon-head.png', await sharp(badge).resize(160, 160).png().toBuffer());
+  await fs.writeFile('public/icon-avatar.png', await sharp(badge).resize(160, 160).png().toBuffer());
 
   for (const [size, file] of [
     [192, 'public/icon-192.png'],

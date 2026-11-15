@@ -73,7 +73,7 @@ scripts/
 ├─ sync-content.mjs     # 同步文章仓库
 └─ generate-assets.mjs  # 裁切头像、生成 favicon/manifest 图标和 OG 图
 public/
-├─ icon-head.png       # 顶栏/幕布头像
+├─ icon-avatar.png     # 顶栏/幕布头像（完整人物等比缩小）
 ├─ icon-192.png
 ├─ icon-512.png
 ├─ favicon.ico
