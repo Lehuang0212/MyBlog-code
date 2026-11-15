@@ -1,0 +1,83 @@
+---
+import type { MarkdownHeading } from 'astro';
+
+interface Props {
+  headings: MarkdownHeading[];
+}
+
+const { headings } = Astro.props;
+const allItems = headings.filter((heading) => heading.depth >= 2 && heading.depth <= 3);
+const desktopItems = allItems.length > 24 ? allItems.filter((heading) => heading.depth === 2) : allItems;
+const mobileItems = allItems.filter((heading) => heading.depth === 2);
+const mobileList = mobileItems.length > 0 ? mobileItems : allItems;
+---
+
+{allItems.length > 0 && (
+  <>
+    <details class="toc-mobile">
+      <summary>目录</summary>
+      <nav aria-label="文章目录">
+        <ul class="toc-list">
+          {mobileList.map((heading) => (
+            <li class={`depth-${heading.depth}`}>
+              <a href={`#${heading.slug}`}>{heading.text}</a>
+            </li>
+          ))}
+        </ul>
+      </nav>
+    </details>
+
+    <aside class="toc-desktop" aria-label="文章目录">
+      <p class="toc-title">On this page</p>
+      <nav>
+        <ul class="toc-list">
+          {desktopItems.map((heading) => (
+            <li class={`depth-${heading.depth}`}>
+              <a href={`#${heading.slug}`}>{heading.text}</a>
+            </li>
+          ))}
+        </ul>
+      </nav>
+    </aside>
+
+    <script is:inline>
+      document.addEventListener('DOMContentLoaded', () => {
+        const links = [...document.querySelectorAll('.toc-desktop a[href^="#"]')];
+        if (!links.length || typeof IntersectionObserver === 'undefined') return;
+
+        const byElement = new Map();
+        for (const link of links) {
+          let id = link.hash.slice(1);
+          try {
+            id = decodeURIComponent(id);
+          } catch {
+            // Keep the raw hash when it is not valid percent-encoding.
+          }
+          const element = document.getElementById(id);
+          if (element) byElement.set(element, link);
+        }
+        if (!byElement.size) return;
+
+        const activate = (activeLink) => {
+          for (const link of links) link.removeAttribute('aria-current');
+          if (activeLink) activeLink.setAttribute('aria-current', 'true');
+        };
+
+        activate(links[0]);
+
+        const observer = new IntersectionObserver(
+          (entries) => {
+            const visible = entries
+              .filter((entry) => entry.isIntersecting)
+              .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
+            if (!visible.length) return;
+            activate(byElement.get(visible[0].target));
+          },
+          { rootMargin: '-88px 0px -68% 0px' },
+        );
+
+        byElement.forEach((_, element) => observer.observe(element));
+      });
+    </script>
+  </>
+)}

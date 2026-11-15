@@ -1,0 +1,22 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+.astro/
+
+# Synced content (cloned from MyBlog-content)
+src/content/blog/
+
+# Local tooling / skills
+.opencode/
+
+# Environment
+.env
+.env.*
+!.env.example
+
+# Logs and OS files
+*.log
+.DS_Store
+Thumbs.db

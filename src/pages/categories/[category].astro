@@ -1,0 +1,52 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PostCard from '../../components/PostCard.astro';
+import {
+  getAllCategories,
+  getAllPosts,
+  getPostsByCategory,
+  normalizeSlug,
+} from '../../lib/posts';
+
+export async function getStaticPaths() {
+  const posts = await getAllPosts();
+  const categories = getAllCategories(posts);
+  return categories.map((category) => ({ params: { category: category.slug } }));
+}
+
+const posts = await getAllPosts();
+const categories = getAllCategories(posts);
+const categoryParam = Astro.params.category ?? '';
+const category = categories.find((item) => item.slug === normalizeSlug(categoryParam));
+
+if (!category) {
+  throw new Error(`Unknown category: ${categoryParam}`);
+}
+
+const categoryPosts = getPostsByCategory(posts, category.slug);
+
+const descriptions: Record<string, string> = {
+  linux: '系统、网络、服务与排错记录。',
+  project: '项目开发、部署与自动化实践。',
+  uncategorized: '暂时没有归类的文章。',
+};
+---
+
+<BaseLayout title={`分类：${category.name}`} description={`${category.name} 分类下的全部文章。`}>
+  <div class="container">
+    <header class="page-header">
+      <p class="eyebrow">Category</p>
+      <h1>{category.name}</h1>
+      <p>{descriptions[category.slug] ?? '相关文章与实践记录。'} 共 {categoryPosts.length} 篇。</p>
+      <div class="page-header-meta">
+        <a href="/archive/">返回归档</a>
+        <span aria-hidden="true">·</span>
+        <a href="/tags/">查看标签</a>
+      </div>
+    </header>
+
+    <div class="post-list">
+      {categoryPosts.map((post) => <PostCard post={post} />)}
+    </div>
+  </div>
+</BaseLayout>

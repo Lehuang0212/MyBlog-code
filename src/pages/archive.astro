@@ -1,0 +1,68 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { formatDate, getAllPosts, getYear, type Post } from '../lib/posts';
+
+const posts = await getAllPosts();
+const latestDate = posts.find((post) => post.date)?.date ?? null;
+const groups = new Map<string, Post[]>();
+
+for (const post of posts) {
+  const year = getYear(post.date);
+  const group = groups.get(year);
+  if (group) {
+    group.push(post);
+  } else {
+    groups.set(year, [post]);
+  }
+}
+
+const shortDate = (date: Date | null) => {
+  if (!date) return '—';
+  return new Intl.DateTimeFormat('zh-CN', {
+    month: '2-digit',
+    day: '2-digit',
+    timeZone: 'Asia/Shanghai',
+  }).format(date);
+};
+---
+
+<BaseLayout title="归档" description="按年份浏览 Lehuang 的全部文章。">
+  <div class="container">
+    <header class="page-header">
+      <p class="eyebrow">Archive</p>
+      <h1>归档</h1>
+      <p>共 {posts.length} 篇文章，按发布时间从新到旧排列。</p>
+      {latestDate && (
+        <div class="page-header-meta">
+          <span>更新于 {formatDate(latestDate)}</span>
+        </div>
+      )}
+    </header>
+
+    {[...groups.entries()].map(([year, items]) => (
+      <section class="archive-year">
+        <div class="archive-year-head">
+          <h2>{year}</h2>
+          <span>{items.length} 篇</span>
+        </div>
+        <ul class="archive-list">
+          {items.map((post) => (
+            <li class="archive-item">
+              {post.date ? (
+                <time class="archive-date" datetime={post.date.toISOString()}>
+                  {shortDate(post.date)}
+                </time>
+              ) : (
+                <span class="archive-date">—</span>
+              )}
+              <a class="archive-title" href={post.href}>{post.title}</a>
+              <div class="archive-tags">
+                {post.tags.slice(0, 3).map((tag) => <span>{tag}</span>)}
+              </div>
+            </li>
+          ))}
+        </ul>
+      </section>
+    ))}
+  </div>
+</BaseLayout>

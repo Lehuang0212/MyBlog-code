@@ -1,0 +1,53 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { SITE } from '../consts';
+---
+
+<BaseLayout title="关于" description="关于 Lehuang 和这个博客。">
+  <div class="about container">
+    <p class="eyebrow">About</p>
+    <h1>关于</h1>
+
+    <p class="about-intro">
+      你好，我是 Lehuang。这里主要记录 Linux、服务器运维和项目开发过程中的实践与思考。
+    </p>
+
+    <section class="about-section">
+      <h2>这里写什么</h2>
+      <p>
+        文章大多来自真实环境里的折腾：系统与服务配置、网络与代理、排错过程，以及一些从零开始的项目。
+        我会尽量把背景、命令和结果写清楚，方便以后回看，也希望能帮到同样在折腾的人。
+      </p>
+    </section>
+
+    <section class="about-section">
+      <h2>最近在做什么</h2>
+      <ul>
+        <li>整理 Linux 与 RHCE / RHCSA 的学习笔记。</li>
+        <li>折腾服务器、网络与自动化备份。</li>
+        <li>把项目开发和部署过程中的问题记录下来。</li>
+      </ul>
+    </section>
+
+    <section class="about-section">
+      <h2>常用工具</h2>
+      <p>
+        Linux / RHEL、Nginx、Docker、Git，以及 Go、Python、TypeScript。
+        工具会变，记录和解决问题的方法不会。
+      </p>
+    </section>
+
+    <section class="about-section">
+      <h2>联系</h2>
+      <p>想交流或者发现文章里的问题，可以通过下面的方式找到我。</p>
+      <div class="about-links">
+        <a href={SITE.github} target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a href="/rss.xml">RSS 订阅</a>
+        {SITE.email && <a href={`mailto:${SITE.email}`}>{SITE.email}</a>}
+      </div>
+      <p class="about-note">
+        这个页面会随着我的学习和项目持续更新。博客使用 Astro 构建，部署在 Cloudflare Pages 上。
+      </p>
+    </section>
+  </div>
+</BaseLayout>

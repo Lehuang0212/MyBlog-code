@@ -1,0 +1,21 @@
+---
+import { getTagHref, getTagSlug } from '../lib/posts';
+
+interface Props {
+  tags: string[];
+  linked?: boolean;
+  class?: string;
+}
+
+const { tags, linked = true, class: className } = Astro.props;
+---
+
+{tags.length > 0 && (
+  <ul class:list={['tag-list', className]}>
+    {tags.map((tag) => (
+      <li>
+        {linked ? <a href={getTagHref(getTagSlug(tag))}>{tag}</a> : <span>{tag}</span>}
+      </li>
+    ))}
+  </ul>
+)}

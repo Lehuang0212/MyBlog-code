@@ -1,0 +1,30 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getAllCategories, getAllPosts, getCategoryHref } from '../../lib/posts';
+
+const posts = await getAllPosts();
+const categories = getAllCategories(posts);
+---
+
+<BaseLayout title="分类" description="按分类浏览 Lehuang 的文章。">
+  <div class="container">
+    <header class="page-header">
+      <p class="eyebrow">Categories</p>
+      <h1>分类</h1>
+      <p>共 {categories.length} 个分类，按文章数量排序。</p>
+    </header>
+
+    <div class="category-grid">
+      {categories.map((category) => (
+        <a class="category-card" href={getCategoryHref(category.slug)}>
+          <div class="category-card-top">
+            <h3>{category.name}</h3>
+            <span class="category-count">{category.count} 篇</span>
+          </div>
+          <p>查看该分类下的全部文章。</p>
+          <span class="category-card-arrow">浏览分类 →</span>
+        </a>
+      ))}
+    </div>
+  </div>
+</BaseLayout>

@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <rect width="1200" height="630" fill="#fafafa"/>
+  <rect x="72" y="96" width="5" height="438" rx="2.5" fill="#be185d"/>
+  <text x="112" y="150" fill="#71717a" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="600" letter-spacing="5">LEHUANG / BLOG</text>
+  <text x="108" y="300" fill="#18181b" font-family="Arial, Helvetica, sans-serif" font-size="128" font-weight="700" letter-spacing="-6">Lehuang</text>
+  <text x="112" y="368" fill="#52525b" font-family="Arial, Helvetica, sans-serif" font-size="34" font-weight="400">Linux · Ops · Projects</text>
+  <text x="112" y="486" fill="#71717a" font-family="Arial, Helvetica, sans-serif" font-size="24" font-weight="400">Notes on systems, servers and side projects.</text>
+  <g transform="translate(1012 456)">
+    <rect width="92" height="92" rx="20" fill="#18181b"/>
+    <path d="M24 30 45 46 24 62" fill="none" stroke="#f472b6" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M51 62h22" fill="none" stroke="#f472b6" stroke-width="6" stroke-linecap="round"/>
+  </g>
+</svg>

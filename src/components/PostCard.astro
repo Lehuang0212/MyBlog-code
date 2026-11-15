@@ -1,0 +1,33 @@
+---
+import TagList from './TagList.astro';
+import { formatDate, getCategoryHref, type Post } from '../lib/posts';
+
+interface Props {
+  post: Post;
+}
+
+const { post } = Astro.props;
+---
+
+<article class="post-card">
+  <div class="post-card-meta">
+    {post.date ? (
+      <time datetime={post.date.toISOString()}>{formatDate(post.date)}</time>
+    ) : (
+      <span>日期待补</span>
+    )}
+    <span aria-hidden="true">·</span>
+    <span>{post.readingTime} 分钟阅读</span>
+    <span aria-hidden="true">·</span>
+    <a href={getCategoryHref(post.category)}>{post.categoryLabel}</a>
+  </div>
+
+  <a class="post-card-title" href={post.href}>{post.title}</a>
+
+  {post.description && <p class="post-card-description">{post.description}</p>}
+
+  <div class="post-card-footer">
+    {post.tags.length > 0 && <TagList tags={post.tags} />}
+    <span class="post-card-arrow" aria-hidden="true">→</span>
+  </div>
+</article>

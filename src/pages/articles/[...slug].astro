@@ -1,0 +1,29 @@
+---
+import { render } from 'astro:content';
+import PostLayout from '../../layouts/PostLayout.astro';
+import {
+  findPostBySlug,
+  getAdjacentPosts,
+  getAllPosts,
+} from '../../lib/posts';
+
+export async function getStaticPaths() {
+  const posts = await getAllPosts();
+  return posts.map((post) => ({ params: { slug: post.slug } }));
+}
+
+const posts = await getAllPosts();
+const slug = Astro.params.slug ?? '';
+const post = findPostBySlug(posts, slug);
+
+if (!post) {
+  throw new Error(`Unknown post slug: ${slug}`);
+}
+
+const { Content, headings } = await render(post.entry);
+const { newer, older } = getAdjacentPosts(posts, post.slug);
+---
+
+<PostLayout post={post} headings={headings} newer={newer} older={older}>
+  <Content />
+</PostLayout>

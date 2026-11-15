@@ -1,0 +1,100 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PostCard from '../components/PostCard.astro';
+import { SITE } from '../consts';
+import { getAllCategories, getAllPosts } from '../lib/posts';
+
+const posts = await getAllPosts();
+const latest = posts.slice(0, SITE.postsPerPage);
+const categories = getAllCategories(posts);
+
+const categoryDescriptions: Record<string, string> = {
+  linux: '系统、网络、服务与排错记录。',
+  project: '项目开发、部署与自动化实践。',
+  uncategorized: '暂时没有归类的文章。',
+};
+---
+
+<BaseLayout>
+  <section class="hero container">
+    <div class="hero-copy">
+      <p class="eyebrow">Linux · Ops · Projects</p>
+      <h1>{SITE.title}</h1>
+      <p class="hero-lede">
+        记录 Linux、服务器运维与项目开发过程中的实践与思考。内容多来自真实环境里的折腾与排错。
+      </p>
+      <div class="hero-actions">
+        <a class="hero-link primary" href="/archive/">
+          浏览全部文章
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M5 12h14"></path>
+            <path d="m13 6 6 6-6 6"></path>
+          </svg>
+        </a>
+        <a class="hero-link" href={SITE.github} target="_blank" rel="noopener noreferrer">
+          GitHub
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M7 17 17 7"></path>
+            <path d="M7 7h10v10"></path>
+          </svg>
+        </a>
+        <a class="hero-link" href="/rss.xml">
+          RSS
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M4 11a9 9 0 0 1 9 9"></path>
+            <path d="M4 4a16 16 0 0 1 16 16"></path>
+            <circle cx="5" cy="19" r="1"></circle>
+          </svg>
+        </a>
+      </div>
+    </div>
+
+    <aside class="terminal" aria-label="终端风格的站点简介">
+      <div class="terminal-bar">
+        <span class="terminal-dot" aria-hidden="true"></span>
+        <span class="terminal-dot" aria-hidden="true"></span>
+        <span class="terminal-dot" aria-hidden="true"></span>
+        <span class="terminal-title">~/about</span>
+      </div>
+      <div class="terminal-body">
+        <div class="terminal-line"><span class="terminal-prompt">$</span><span>whoami</span></div>
+        <div class="terminal-line terminal-output">lehuang</div>
+        <div class="terminal-gap"></div>
+        <div class="terminal-line"><span class="terminal-prompt">$</span><span>cat focus.txt</span></div>
+        <div class="terminal-line terminal-output">Linux · 服务器运维 · 自动化</div>
+        <div class="terminal-gap"></div>
+        <div class="terminal-line"><span class="terminal-prompt">$</span><span>ls posts</span></div>
+        <div class="terminal-line terminal-output">Linux&nbsp;&nbsp;Project</div>
+      </div>
+    </aside>
+  </section>
+
+  <section class="section container">
+    <div class="section-head">
+      <h2>最新文章</h2>
+      <a href="/archive/">全部文章 →</a>
+    </div>
+    <div class="post-list">
+      {latest.map((post) => <PostCard post={post} />)}
+    </div>
+  </section>
+
+  <section class="section container">
+    <div class="section-head">
+      <h2>分类</h2>
+      <a href="/tags/">按标签浏览 →</a>
+    </div>
+    <div class="category-grid">
+      {categories.map((category) => (
+        <a class="category-card" href={`/categories/${category.slug}/`}>
+          <div class="category-card-top">
+            <h3>{category.name}</h3>
+            <span class="category-count">{category.count} 篇</span>
+          </div>
+          <p>{categoryDescriptions[category.slug] ?? '相关文章与实践记录。'}</p>
+          <span class="category-card-arrow">浏览分类 →</span>
+        </a>
+      ))}
+    </div>
+  </section>
+</BaseLayout>

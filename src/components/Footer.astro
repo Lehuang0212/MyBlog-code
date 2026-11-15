@@ -1,0 +1,17 @@
+---
+import { SITE } from '../consts';
+
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <p>© {year} {SITE.author} · 记录学习与折腾</p>
+    <div class="footer-links">
+      <a href={SITE.github} target="_blank" rel="noopener noreferrer">GitHub</a>
+      <a href="/rss.xml">RSS</a>
+      <a href="/about/">关于</a>
+      <span class="footer-note">Astro · Cloudflare Pages</span>
+    </div>
+  </div>
+</footer>

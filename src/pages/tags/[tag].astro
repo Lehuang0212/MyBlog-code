@@ -1,0 +1,44 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PostCard from '../../components/PostCard.astro';
+import {
+  getAllPosts,
+  getAllTags,
+  getPostsByTag,
+  normalizeSlug,
+} from '../../lib/posts';
+
+export async function getStaticPaths() {
+  const posts = await getAllPosts();
+  const tags = getAllTags(posts);
+  return tags.map((tag) => ({ params: { tag: tag.slug } }));
+}
+
+const posts = await getAllPosts();
+const tags = getAllTags(posts);
+const tagParam = Astro.params.tag ?? '';
+const tag = tags.find((item) => item.slug === normalizeSlug(tagParam));
+
+if (!tag) {
+  throw new Error(`Unknown tag: ${tagParam}`);
+}
+
+const taggedPosts = getPostsByTag(posts, tag.slug);
+---
+
+<BaseLayout title={`标签：${tag.name}`} description={`标签 ${tag.name} 下的全部文章。`}>
+  <div class="container">
+    <header class="page-header">
+      <p class="eyebrow">Tag</p>
+      <h1>#{tag.name}</h1>
+      <p>共 {taggedPosts.length} 篇文章。返回 <a href="/tags/">全部标签</a>。</p>
+      <div class="page-header-meta">
+        <span>{tag.count} 篇收录</span>
+      </div>
+    </header>
+
+    <div class="post-list">
+      {taggedPosts.map((post) => <PostCard post={post} />)}
+    </div>
+  </div>
+</BaseLayout>
