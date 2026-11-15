@@ -5,8 +5,10 @@
 ## 技术栈
 
 - Astro 7（静态输出，无运行时）
-- 原生 CSS + 设计 token，浅色/深色两套主题
+- 原生 CSS + 设计 token，暖纸色浅色/深色两套主题
+- 字体：Newsreader + 思源宋体（Noto Serif SC）+ Inter + JetBrains Mono
 - Expressive Code（代码高亮、复制按钮、明暗双主题）
+- 首页入场幕布、桌面端鼠标跟随圆环（原生 CSS/JS，无 GSAP）
 - `@astrojs/rss`、`@astrojs/sitemap`
 - Cloudflare Pages（全球 CDN、HTTPS、预览部署）
 - 内容同步：`scripts/sync-content.mjs` 克隆/更新 `MyBlog-content`
@@ -58,19 +60,25 @@ draft: false
 
 ```text
 src/
-├─ components/          # Header、Footer、PostCard、TOC、主题切换
+├─ assets/icon-source.png  # 网站头像源图（不直接部署）
+├─ components/          # Header、Footer、PostCard、TOC、主题切换、入场幕布、鼠标圆环
 ├─ content.config.ts    # 内容集合与 frontmatter schema
 ├─ consts.ts            # 站点信息、导航
 ├─ layouts/             # BaseLayout、PostLayout
 ├─ lib/posts.ts         # 排序、标签、上下篇、日期、摘要
 ├─ pages/               # 首页、归档、文章、标签、分类、关于、404、RSS
-├─ styles/global.css    # 设计 token、布局、prose、响应式
+├─ styles/global.css    # 设计 token、字体、布局、prose、动效、响应式
 └─ content/blog/        # 构建时生成，已 gitignore
 scripts/
 ├─ sync-content.mjs     # 同步文章仓库
-└─ generate-assets.mjs  # 从 SVG 生成 OG 图和 touch icon
+└─ generate-assets.mjs  # 裁切头像、生成 favicon/manifest 图标和 OG 图
 public/
-├─ favicon.svg
+├─ icon-head.png       # 顶栏/幕布头像
+├─ icon-192.png
+├─ icon-512.png
+├─ favicon.ico
+├─ favicon-32.png
+├─ favicon-48.png
 ├─ og-default.png
 ├─ apple-touch-icon.png
 ├─ site.webmanifest
@@ -79,13 +87,18 @@ docs/
 └─ content-repo-workflow.yml  # 内容仓库自动触发模板
 ```
 
-## 主题
+## 主题与视觉
 
-- 默认浅色，首次访问不跟随系统。
-- 右上角太阳/月亮按钮切换；选择写入 `localStorage`，刷新不闪。
+- 暖纸色浅色主题 + 暖黑深色主题；强调色 `#F09A32`。
+- 正文/标题：Newsreader + 思源宋体；UI/日期/表格：Inter；代码：JetBrains Mono。
+- 默认浅色，首次访问不跟随系统；右上角太阳/月亮按钮切换，选择写入 `localStorage`，刷新不闪。
 - `<html data-theme="light|dark">` 驱动两套 CSS token。
-- Expressive Code 使用 `github-light` / `github-dark`，跟随同一个按钮切换。
+- 首页每次加载播放入场幕布，点击或按 `Esc` 可跳过；`prefers-reduced-motion` 下不播放。
+- 桌面端有鼠标跟随圆环；触屏和 reduced motion 下关闭，文章页降低透明度。
+- Expressive Code 使用 `github-light` / `github-dark`，跟随同一个按钮切换；代码块底色已调暖。
 - 无 JS 时回退到浅色。
+
+修改头像时替换 `src/assets/icon-source.png`，然后运行 `node scripts/generate-assets.mjs`，会重新生成 favicon、manifest 图标和 OG 图。
 
 ## Cloudflare Pages 部署
 
@@ -137,7 +150,7 @@ Pages 只监听代码仓库，文章仓库的 push 不会自动触发构建，�
 # 只同步内容，不构建
 npm run sync:content
 
-# 重新生成 OG 图 / touch icon
+# 重新生成头像、favicon、manifest 图标和 OG 图
 node scripts/generate-assets.mjs
 ```
 

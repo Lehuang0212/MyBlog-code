@@ -1,0 +1,55 @@
+<div class="cursor-ring" id="cursor-ring" aria-hidden="true"></div>
+
+<script is:inline>
+  (() => {
+    const ring = document.getElementById('cursor-ring');
+    if (!ring) return;
+
+    const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (!finePointer || reducedMotion) return;
+
+    let x = window.innerWidth / 2;
+    let y = window.innerHeight / 2;
+    let targetX = x;
+    let targetY = y;
+    let visible = false;
+
+    const render = () => {
+      x += (targetX - x) * 0.18;
+      y += (targetY - y) * 0.18;
+      ring.style.transform = `translate3d(${x}px, ${y}px, 0) translate(-50%, -50%)`;
+      requestAnimationFrame(render);
+    };
+
+    const show = () => {
+      if (visible) return;
+      visible = true;
+      ring.classList.add('is-visible');
+    };
+
+    const hide = () => {
+      if (!visible) return;
+      visible = false;
+      ring.classList.remove('is-visible');
+    };
+
+    window.addEventListener(
+      'pointermove',
+      (event) => {
+        targetX = event.clientX;
+        targetY = event.clientY;
+        show();
+      },
+      { passive: true },
+    );
+
+    window.addEventListener('pointerdown', hide);
+    window.addEventListener('pointerup', show);
+    window.addEventListener('blur', hide);
+    document.addEventListener('pointerleave', hide);
+    document.addEventListener('pointercancel', hide);
+
+    render();
+  })();
+</script>

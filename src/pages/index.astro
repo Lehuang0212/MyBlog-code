@@ -15,7 +15,7 @@ const categoryDescriptions: Record<string, string> = {
 };
 ---
 
-<BaseLayout>
+<BaseLayout intro>
   <section class="hero container">
     <div class="hero-copy">
       <p class="eyebrow">Linux · Ops · Projects</p>
@@ -49,24 +49,27 @@ const categoryDescriptions: Record<string, string> = {
       </div>
     </div>
 
-    <aside class="terminal" aria-label="终端风格的站点简介">
-      <div class="terminal-bar">
-        <span class="terminal-dot" aria-hidden="true"></span>
-        <span class="terminal-dot" aria-hidden="true"></span>
-        <span class="terminal-dot" aria-hidden="true"></span>
-        <span class="terminal-title">~/about</span>
-      </div>
-      <div class="terminal-body">
-        <div class="terminal-line"><span class="terminal-prompt">$</span><span>whoami</span></div>
-        <div class="terminal-line terminal-output">lehuang</div>
-        <div class="terminal-gap"></div>
-        <div class="terminal-line"><span class="terminal-prompt">$</span><span>cat focus.txt</span></div>
-        <div class="terminal-line terminal-output">Linux · 服务器运维 · 自动化</div>
-        <div class="terminal-gap"></div>
-        <div class="terminal-line"><span class="terminal-prompt">$</span><span>ls posts</span></div>
-        <div class="terminal-line terminal-output">Linux&nbsp;&nbsp;Project</div>
-      </div>
-    </aside>
+    <div class="hero-visual">
+      <!-- MC3D 形象确定后，用人物替换这块终端卡片；其余布局不用动。 -->
+      <aside class="terminal" aria-label="终端风格的站点简介">
+        <div class="terminal-bar">
+          <span class="terminal-dot" aria-hidden="true"></span>
+          <span class="terminal-dot" aria-hidden="true"></span>
+          <span class="terminal-dot" aria-hidden="true"></span>
+          <span class="terminal-title">~/about</span>
+        </div>
+        <div class="terminal-body">
+          <div class="terminal-line"><span class="terminal-prompt">$</span><span>whoami</span></div>
+          <div class="terminal-line terminal-output">lehuang</div>
+          <div class="terminal-gap"></div>
+          <div class="terminal-line"><span class="terminal-prompt">$</span><span>cat focus.txt</span></div>
+          <div class="terminal-line terminal-output">Linux · 服务器运维 · 自动化</div>
+          <div class="terminal-gap"></div>
+          <div class="terminal-line"><span class="terminal-prompt">$</span><span>ls posts</span></div>
+          <div class="terminal-line terminal-output">Linux&nbsp;&nbsp;Project</div>
+        </div>
+      </aside>
+    </div>
   </section>
 
   <section class="section container">

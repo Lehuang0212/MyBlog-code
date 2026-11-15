@@ -51,7 +51,7 @@
       const isDark = root.dataset.theme === 'dark';
       button.setAttribute('aria-label', isDark ? '切换到日间模式' : '切换到夜间模式');
       button.setAttribute('aria-pressed', String(isDark));
-      if (meta) meta.setAttribute('content', isDark ? '#0b0b0e' : '#fafafa');
+      if (meta) meta.setAttribute('content', isDark ? '#14110e' : '#faf7f2');
     };
 
     button.addEventListener('click', () => {

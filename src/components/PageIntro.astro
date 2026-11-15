@@ -1,0 +1,40 @@
+<div class="page-intro" id="page-intro" aria-hidden="true">
+  <div class="page-intro-inner">
+    <img class="page-intro-avatar" src="/icon-head.png" width="60" height="60" alt="" />
+    <p class="page-intro-title">Lehuang’s <em>Blog</em></p>
+    <p class="page-intro-hint">点击跳过 · Click to skip</p>
+  </div>
+</div>
+
+<script is:inline>
+  (() => {
+    const intro = document.getElementById('page-intro');
+    if (!intro) return;
+
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      intro.remove();
+      return;
+    }
+
+    const dismiss = () => {
+      if (!intro.isConnected) return;
+      document.documentElement.classList.add('intro-skipped');
+      intro.remove();
+    };
+
+    intro.addEventListener('click', dismiss);
+    intro.addEventListener('animationend', (event) => {
+      if (event.animationName === 'intro-curtain') dismiss();
+    });
+
+    document.addEventListener(
+      'keydown',
+      (event) => {
+        if (event.key === 'Escape' || event.key === 'Enter' || event.key === ' ') {
+          dismiss();
+        }
+      },
+      { once: true },
+    );
+  })();
+</script>

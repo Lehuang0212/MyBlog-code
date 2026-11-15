@@ -1,4 +1,6 @@
 ---
+import '@fontsource-variable/newsreader';
+import '@fontsource-variable/noto-serif-sc';
 import '@fontsource-variable/inter';
 import '@fontsource/jetbrains-mono/400.css';
 import '@fontsource/jetbrains-mono/500.css';
@@ -6,8 +8,10 @@ import '@fontsource/jetbrains-mono/700.css';
 import '../styles/global.css';
 
 import BaseHead from '../components/BaseHead.astro';
+import CursorRing from '../components/CursorRing.astro';
 import Footer from '../components/Footer.astro';
 import Header from '../components/Header.astro';
+import PageIntro from '../components/PageIntro.astro';
 
 interface Props {
   title?: string;
@@ -16,9 +20,10 @@ interface Props {
   type?: 'website' | 'article';
   publishedTime?: string;
   tags?: string[];
+  intro?: boolean;
 }
 
-const { title, description, image, type, publishedTime, tags } = Astro.props;
+const { title, description, image, type, publishedTime, tags, intro = false } = Astro.props;
 ---
 
 <!doctype html>
@@ -34,11 +39,11 @@ const { title, description, image, type, publishedTime, tags } = Astro.props;
     />
     <style is:inline>
       html {
-        background: #fafafa;
+        background: #faf7f2;
       }
 
       html[data-theme='dark'] {
-        background: #0b0b0e;
+        background: #14110e;
       }
     </style>
     <script is:inline>
@@ -46,7 +51,7 @@ const { title, description, image, type, publishedTime, tags } = Astro.props;
         const setTheme = (theme) => {
           document.documentElement.dataset.theme = theme;
           const meta = document.querySelector('meta[name="theme-color"]');
-          if (meta) meta.setAttribute('content', theme === 'dark' ? '#0b0b0e' : '#fafafa');
+          if (meta) meta.setAttribute('content', theme === 'dark' ? '#14110e' : '#faf7f2');
         };
 
         try {
@@ -59,12 +64,14 @@ const { title, description, image, type, publishedTime, tags } = Astro.props;
     </script>
   </head>
   <body>
+    {intro && <PageIntro />}
     <a class="skip-link" href="#main">跳到主要内容</a>
     <Header />
     <main id="main">
       <slot />
     </main>
     <Footer />
+    <CursorRing />
     <script is:inline>
       document.addEventListener('DOMContentLoaded', () => {
         for (const button of document.querySelectorAll('.expressive-code .copy button')) {
